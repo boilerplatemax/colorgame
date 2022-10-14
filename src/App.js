@@ -1,7 +1,6 @@
 import React,{useState, useEffect} from 'react'
 import './App.css';
 
-
 function App() {
   const [randomNum, setRandomNum]=useState('')
 
@@ -11,7 +10,7 @@ function App() {
 
   useEffect(()=>{
     generateColors()
-  },[])
+  },[''])
   const chars =['1','2','3','4','5','6','7','8','9','A','B','C','D','E','F']
   const getRandomColor=()=>{
     const color = new Array(6).fill("").map(()=>chars[Math.floor(Math.random()*chars.length)]).join('')
@@ -43,12 +42,11 @@ function App() {
       </div>
       <div className='btn__container'>
         {colorArray.map((x, index)=>{
-          return(<button onClick={checkAnswerHandler} className='btn'>{colorArray[index]}</button>)
+          return(<button onClick={checkAnswerHandler} key={index} className='btn'>{colorArray[index]}</button>)
         })}
 
       </div>
     </div>
   );
 }
-
 export default App;
