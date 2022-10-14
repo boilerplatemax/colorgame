@@ -2,15 +2,13 @@ import React,{useState, useEffect} from 'react'
 import './App.css';
 
 function App() {
-  const [randomNum, setRandomNum]=useState('')
+  const [randomNum, setRandomNum]=useState(Math.floor(Math.random()*3))
 
-  const [colorArray, setColorArray]=useState([])
+  const [colorArray, setColorArray]=useState([getRandomColor(),getRandomColor(),getRandomColor()])
 
   const [answer, setAnswer]=useState('Guess the color!')
 
-  useEffect(()=>{
-    generateColors()
-  },[''])
+
   const chars =['1','2','3','4','5','6','7','8','9','A','B','C','D','E','F']
   const getRandomColor=()=>{
     const color = new Array(6).fill("").map(()=>chars[Math.floor(Math.random()*chars.length)]).join('')
