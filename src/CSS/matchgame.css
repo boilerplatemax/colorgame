@@ -4,9 +4,27 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    font-family: monospace;
     flex-direction: column;
-    margin-top: 300px;
+    margin-top: 50px;
 
+}
+.match-game__header{
+    width: 740px;
+    display: flex;
+    align-items: center;
+    border: 1px solid lightslategray;
+    border-radius: 10px;
+    color: lightslategray;
+    padding: 10px;
+
+}
+.match-game__header-title{
+    width: 60%;
+
+}
+.match-game__header-moves{
+    width: 20%;
 }
 .match-game__card-container{
 
@@ -14,28 +32,73 @@
     grid-template-columns: auto auto auto auto;
     justify-content: center;
     align-items: center;
-    grid-gap: 5px;
+    grid-gap: 10px;
     padding: 10px;
     
 }
 .match-game__card{
     position: relative;
-    background-color: rgb(151, 151, 151);
-    width: 120px;
-    height: 120px;
+    width: 180px;
+    height: 180px;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 10px;
+    cursor: pointer;
+
+    border: 1px solid lightslategray;
 }
-.match-game__solved{
+
+.match-game__card-game-over{
+    cursor: default;
+}
+.match-game__card-back, .match-game__card-front{
+    width: inherit;
+    height: inherit;
+    border-radius: 10px;
+    position: absolute;
+    backface-visibility: hidden;
+}
+.match-game__card-back:hover{
+    filter:brightness(90%);
+}
+
+.match-game__card-solved{
     visibility:hidden;
 }
+.match-game__card-back-img,
 .match-game__img{
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 10px;
-    
 }
+.match-game__try-again-btn{
 
+    border: 1px solid lightslategray;
+    font-size: 1rem;
+    background-color: white;
+    color: lightslategray;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.match-game__try-again-btn:hover{
+    background-color: lightslategray;
+    color: white;
+}
+@media screen and (max-width: 992px) {
+    .match-game{
+        transform: scale(.75);
+        margin-top: -50px;
+    }
+  }
+  @media screen and (max-width: 700px) {
+    .match-game{
+        transform: scale(.6);
+        margin-top: -100px;
+    }
+  }

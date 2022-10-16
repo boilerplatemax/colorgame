@@ -1,6 +1,9 @@
 import React,{useState, useEffect} from 'react'
+import {Animated} from "react-animated-css";
 import { v4 as uuidv4 } from 'uuid';
-
+import Card from './Card';
+//https://cdn2.thecatapi.com/images/a3.jpg
+//https://cdn2.thecatapi.com/images/C0YfrgcOD.jpg
 const data =[
     {
         id:uuidv4(),
@@ -60,9 +63,9 @@ const data =[
     }
     
 ]
-
+const BACK_IMG='https://i.etsystatic.com/7867651/r/il/d1ac8a/2083985616/il_794xN.2083985616_ou94.jpg'
 export default function MatchGame() {
-    const shuffledArray = [...data,...data.map(item=>[{...item, id:uuidv4()}][0])].sort(()=>.5-Math.random())
+const shuffledArray = [...data,...data.map(item=>[{...item, id:uuidv4()}][0])].sort(()=>.5-Math.random())
 
 const [cardArray, setCardArray]=useState(shuffledArray)
 
@@ -77,17 +80,12 @@ const [bestMoves, setBestMoves] = useState(0)
 const [gameOver, setGameOver]=useState(false)
 
 
-
 useEffect(()=>{
-    
-//onmount our data array is double, given random ids and shuffled
-setCardArray(shuffledArray)
-const arr = cardArray
-setCardArray(arr.map(item=>[{...item, visible:false}][0]))
+setCardArray(cardArray.map(item=>[{...item, visible:false}][0]))
 },[gameOver])
 
 useEffect(()=>{
-    if(guess.length!=2)return
+    if(guess.length!==2)return
     if(guess.length%1===0)setMoves(prev=>prev+1)
     setCanClick(false)
 
@@ -102,7 +100,7 @@ useEffect(()=>{
     const flipAllCards = () =>{
         const arr = cardArray
         setCardArray(arr.map(item=>[{...item, visible:false}][0]))
-        console.log(arr)
+
     }
     
     const checkGameOver = () =>{
@@ -113,7 +111,7 @@ useEffect(()=>{
 
         }
     }
-
+    
     setTimeout(
         ()=>{
             flipAllCards()
@@ -131,6 +129,7 @@ useEffect(()=>{
 const clickHandler=(card)=>{
     if(card.visible)return
     if(canClick===false)return
+
     //flip card
     const newArray=cardArray
     newArray.filter(item=>item.id===card.id)[0].visible=true
@@ -140,45 +139,64 @@ const clickHandler=(card)=>{
     
 
 }
-const cardClassNameHandler = (solved) =>{
-    let cardClassName='match-game__card'
-    if(solved){
-        cardClassName+=' match-game__solved'
-    }
-    return cardClassName
-}
+
 const resetGame=()=>{
     setGuess([])
     setCardArray(shuffledArray)
     setGameOver(false)
     setMoves(0)
+    setCardArray(cardArray.map(item=>[{...item, visible:false}][0]))
 }
   return (
     <div className='match-game'>
+    
         <div className='match-game__header'>
-            <div className='match-game__header-title'><h2>Matching Game</h2></div>
-            <div className='match-game__header-moves'><h2>Moves: {moves} Best: {bestMoves}</h2></div>
+            <div className='match-game__header-title'><h3>Matching Game</h3></div>
+            <div className='match-game__header-moves'><h3>Moves: {moves}</h3></div>
+            <div className='match-game__header-moves'><h3>Best: {bestMoves}</h3></div>
         </div>
+        
         {
         gameOver===false?
         <div className='match-game__card-container'>
             {cardArray&&cardArray.map((card)=>{
                 return(
+                
                 <div
                 key={uuidv4()}
-                className={cardClassNameHandler(card.solved)}
+
                 onClick={()=>clickHandler(card)}>
-                    {card.visible&&
-                    <img className='match-game__img' src={card.src}/>
-                    }
+
+                    <Card card={card} clickHandler={clickHandler} BACK_IMG={BACK_IMG} />
+      
                 </div>
+                
                 )
             })}
         </div>:
-        <div>
-            <button onClick={resetGame}>Try again</button>
-        </div>
+
+        <>
+            <div className='match-game__card-container'>
+            {cardArray&&cardArray.map((card, index)=>{
+                return(
+                    
+                <Animated animationIn="fadeIn" animateOnMount isVisible={true} animationInDelay={index*50} key={uuidv4()}>
+                <div className='match-game__card match-game__card-game-over'>
+                    <div className='match-game__card-front'>
+                        <img className='match-game__img' src={card.src} alt={card.id}/>
+                    </div>
+                </div>
+                </Animated>
+                
+                )
+            })}
+            </div>
+            <button onClick={resetGame} className='match-game__try-again-btn'>Try again</button>
+        </>
         }
     </div>
   )
 }
+
+
+                
