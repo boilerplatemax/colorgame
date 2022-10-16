@@ -10,6 +10,7 @@ export default function ColorGame() {
     useEffect(()=>{
   
       const generateColors=()=>{
+        const chars =['1','2','3','4','5','6','7','8','9','A','B','C','D','E','F']
         const getRandomColor=()=>{
           const color = new Array(6).fill("").map(()=>chars[Math.floor(Math.random()*chars.length)]).join('')
           return `#${color}`
@@ -25,7 +26,7 @@ export default function ColorGame() {
     if(answer)generateColors()
     },[answer])
   
-    const chars =['1','2','3','4','5','6','7','8','9','A','B','C','D','E','F']
+    
     
   
     const checkAnswerHandler=e=>{

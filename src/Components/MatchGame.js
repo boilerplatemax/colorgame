@@ -81,7 +81,7 @@ const [gameOver, setGameOver]=useState(false)
 
 
 useEffect(()=>{
-setCardArray(cardArray.map(item=>[{...item, visible:false}][0]))
+setCardArray(c=>c.map(item=>[{...item, visible:false}][0]))
 },[gameOver])
 
 useEffect(()=>{
@@ -107,7 +107,7 @@ useEffect(()=>{
         const noMoreCards = (cardArray.every(value => value.solved === true))
         if(noMoreCards){
             setGameOver(noMoreCards)
-            if(bestMoves>moves||bestMoves===0)setBestMoves(moves+1)
+            // if(bestMoves>moves||bestMoves===0)setBestMoves(moves+1)
 
         }
     }
