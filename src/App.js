@@ -1,6 +1,6 @@
 import React from 'react'
 import './CSS/App.css';
-import ColorGame from './Components/ColorGame';
+// import ColorGame from './Components/ColorGame';
 import MatchGame from './Components/MatchGame';
 
 

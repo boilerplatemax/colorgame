@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from 'react'
+import React,{useState, useEffect, useRef} from 'react'
 import {Animated} from "react-animated-css";
 import { v4 as uuidv4 } from 'uuid';
 import Card from './Card';
@@ -69,6 +69,8 @@ const shuffledArray = [...data,...data.map(item=>[{...item, id:uuidv4()}][0])].s
 
 const [cardArray, setCardArray]=useState(shuffledArray)
 
+const cardArrayRef = useRef([])
+
 const [guess, setGuess] = useState([])
 
 const [canClick, setCanClick] = useState(true)
@@ -85,12 +87,16 @@ setCardArray(c=>c.map(item=>[{...item, visible:false}][0]))
 },[gameOver])
 
 useEffect(()=>{
+cardArrayRef.current=cardArray
+},[cardArray])
+
+useEffect(()=>{
     if(guess.length!==2)return
     if(guess.length%1===0)setMoves(prev=>prev+1)
     setCanClick(false)
-
+    const arr = cardArrayRef.current
     const checkGuess = () =>{
-        const arr = cardArray
+
         const correctAnswer=guess[0]
         console.log('matched!')
         arr.filter(item=>item.name===correctAnswer)[0].solved=true
@@ -98,17 +104,15 @@ useEffect(()=>{
         setCardArray([...arr])
     }
     const flipAllCards = () =>{
-        const arr = cardArray
+        
         setCardArray(arr.map(item=>[{...item, visible:false}][0]))
 
     }
     
     const checkGameOver = () =>{
-        const noMoreCards = (cardArray.every(value => value.solved === true))
+        const noMoreCards = arr.every(value => value.solved === true)
         if(noMoreCards){
             setGameOver(noMoreCards)
-            // if(bestMoves>moves||bestMoves===0)setBestMoves(moves+1)
-
         }
     }
     
@@ -125,7 +129,12 @@ useEffect(()=>{
         },750
     )
     
-},[guess])
+},[guess,cardArrayRef])
+
+useEffect(()=>{
+    if(gameOver)if(bestMoves>moves||bestMoves===0)setBestMoves(moves+1)
+},[gameOver,bestMoves,moves])
+
 const clickHandler=(card)=>{
     if(card.visible)return
     if(canClick===false)return
@@ -136,8 +145,6 @@ const clickHandler=(card)=>{
     setCardArray([...newArray])
     //is solved
     setGuess([...guess, card.name])
-    
-
 }
 
 const resetGame=()=>{
