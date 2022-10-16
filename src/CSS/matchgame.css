@@ -1,0 +1,41 @@
+.match-game{
+    height: 100%;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 300px;
+
+}
+.match-game__card-container{
+
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    justify-content: center;
+    align-items: center;
+    grid-gap: 5px;
+    padding: 10px;
+    
+}
+.match-game__card{
+    position: relative;
+    background-color: rgb(151, 151, 151);
+    width: 120px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+.match-game__solved{
+    visibility:hidden;
+}
+.match-game__img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    
+}
+
