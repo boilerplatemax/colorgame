@@ -145,7 +145,7 @@ const resetGame=()=>{
     setCardArray(shuffledArray)
     setGameOver(false)
     setMoves(0)
-    setCardArray(cardArray.map(item=>[{...item, visible:false}][0]))
+    
 }
   return (
     <div className='match-game'>

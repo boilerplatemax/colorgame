@@ -10,6 +10,11 @@ export default function ColorGame() {
     useEffect(()=>{
   
       const generateColors=()=>{
+        const getRandomColor=()=>{
+          const color = new Array(6).fill("").map(()=>chars[Math.floor(Math.random()*chars.length)]).join('')
+          return `#${color}`
+          
+        }
         const actualColor=getRandomColor()
         setColor(actualColor)
         //0.5-Math.random() will either return a negative or positive number, depending on result each array element will either stay in its spot or shift which creates a simple shuffle mechanic
@@ -21,11 +26,7 @@ export default function ColorGame() {
     },[answer])
   
     const chars =['1','2','3','4','5','6','7','8','9','A','B','C','D','E','F']
-    const getRandomColor=()=>{
-      const color = new Array(6).fill("").map(()=>chars[Math.floor(Math.random()*chars.length)]).join('')
-      return `#${color}`
-      
-    }
+    
   
     const checkAnswerHandler=e=>{
       const guess =e.target.innerHTML
