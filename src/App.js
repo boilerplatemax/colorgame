@@ -4,7 +4,7 @@ import ColorGame from './Components/ColorGame';
 import MatchGame from './Components/MatchGame';
 import Navigation from './Components/Navigation';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import ReactDOM from "react-dom";
+
 import {
   HashRouter as Router,Routes,
   Route
