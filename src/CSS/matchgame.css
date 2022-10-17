@@ -1,6 +1,6 @@
 .match-game{
     height: 100%;
-    width: 100vw;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -10,7 +10,7 @@
 
 }
 .match-game__header{
-    width: 740px;
+    width: 640px;
     display: flex;
     align-items: center;
     border: 1px solid lightslategray;
@@ -38,17 +38,36 @@
 }
 .match-game__card{
     position: relative;
-    width: 180px;
-    height: 180px;
+    width: 150px;
+    height: 150px;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 10px;
     cursor: pointer;
-
+    box-shadow: 0 0 3px 1px rgb(117, 117, 117);
     border: 1px solid lightslategray;
+    background-position: center;
+    background-size: cover;
+}
+.match-game__card-flip{
+    animation: flipAnim .25s;
 }
 
+@keyframes flipAnim {
+    0%{
+        
+    background-image: url('https://i.etsystatic.com/7867651/r/il/d1ac8a/2083985616/il_794xN.2083985616_ou94.jpg');
+    }
+
+    50%{
+        background-image: url('https://i.etsystatic.com/7867651/r/il/d1ac8a/2083985616/il_794xN.2083985616_ou94.jpg');
+        transform: scaleX(0);
+
+    };
+    
+    
+  }
 .match-game__card-game-over{
     cursor: default;
 }

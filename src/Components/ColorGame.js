@@ -47,12 +47,12 @@ export default function ColorGame() {
           {message}
         </h1>
         </div>
-        <div className='btn__container'>
+        <div className='color-game__btn__container'>
           {colorArray.map((x, index)=>{
             return(
             <button
             onClick={checkAnswerHandler}
-            key={index} className='btn'>
+            key={index} className='color-game__btn'>
               {colorArray[index]}
             </button>
             )

@@ -1,74 +1,22 @@
 import React,{useState, useEffect, useRef} from 'react'
-import {Animated} from "react-animated-css";
 import { v4 as uuidv4 } from 'uuid';
 import Card from './Card';
+import gameData from '../data/matchgamedata.json'
 //https://cdn2.thecatapi.com/images/a3.jpg
 //https://cdn2.thecatapi.com/images/C0YfrgcOD.jpg
-const data =[
-    {
-        id:uuidv4(),
-        name:'card1',
-        src:'https://cdn2.thecatapi.com/images/ab3.jpg',
-        visible:false,
-        solved:false
-    },
-    {
-        id:uuidv4(),
-        name:'card2',
-        src:'https://cdn2.thecatapi.com/images/ce1.jpg',
-        visible:false,
-        solved:false
-    },
-    {
-        id:uuidv4(),
-        name:'card3',
-        src:'https://cdn2.thecatapi.com/images/4rn.jpg',
-        visible:false,
-        solved:false
-    },
-    {
-        id:uuidv4(),
-        name:'card4',
-        src:'https://cdn2.thecatapi.com/images/2a5.jpg',
-        visible:false,
-        solved:false
-    },
-    {
-        id:uuidv4(),
-        name:'card5',
-        src:'https://cdn2.thecatapi.com/images/6an.jpg',
-        visible:false,
-        solved:false
-    },
-    {
-        id:uuidv4(),
-        name:'card6',
-        src:'https://cdn2.thecatapi.com/images/MTk5NDY0MQ.jpg',
-        visible:false,
-        solved:false
-    },
-    {
-        id:uuidv4(),
-        name:'card7',
-        src:'https://cdn2.thecatapi.com/images/3r1.jpg',
-        visible:false,
-        solved:false
-    },
-    {
-        id:uuidv4(),
-        name:'card8',
-        src:'https://cdn2.thecatapi.com/images/wiFvbArkQ.jpg',
-        visible:false,
-        solved:false
-    }
-    
-]
-const BACK_IMG='https://i.etsystatic.com/7867651/r/il/d1ac8a/2083985616/il_794xN.2083985616_ou94.jpg'
+const data =gameData
+
 export default function MatchGame() {
-const shuffledArray = [...data,...data.map(item=>[{...item, id:uuidv4()}][0])].sort(()=>.5-Math.random())
+const BACK_IMG='https://i.etsystatic.com/7867651/r/il/d1ac8a/2083985616/il_794xN.2083985616_ou94.jpg'
+
+const shuffledArray = [
+    //populate array with twice the data and assign random ids
+    ...data.map(item=>[{...item, id:uuidv4()}][0]),
+    ...data.map(item=>[{...item, id:uuidv4()}][0])]
+    .sort(()=>.5-Math.random())
 
 const [cardArray, setCardArray]=useState(shuffledArray)
-
+//I decided to handle onClick function in a useEffect for cleanliness
 const cardArrayRef = useRef([])
 
 const [guess, setGuess] = useState([])
@@ -77,21 +25,26 @@ const [canClick, setCanClick] = useState(true)
 
 const [moves, setMoves] = useState(0)
 
+const [selectedId, setSelectedId] = useState('')
+
 const [bestMoves, setBestMoves] = useState(0)
 
 const [gameOver, setGameOver]=useState(false)
 
-
+//show all cards when game is over
 useEffect(()=>{
 setCardArray(c=>c.map(item=>[{...item, visible:false}][0]))
 },[gameOver])
 
+//ref update
 useEffect(()=>{
 cardArrayRef.current=cardArray
 },[cardArray])
 
 useEffect(()=>{
+    //no need to run logic if user has not made 2 guesses yet
     if(guess.length!==2)return
+    //add a move every other click
     if(guess.length%1===0)setMoves(prev=>prev+1)
     setCanClick(false)
     const arr = cardArrayRef.current
@@ -110,9 +63,10 @@ useEffect(()=>{
     }
     
     const checkGameOver = () =>{
-        const noMoreCards = arr.every(value => value.solved === true)
-        if(noMoreCards){
-            setGameOver(noMoreCards)
+        //checks if all cards are solved
+        const isGameOver = arr.every(value => value.solved === true)
+        if(isGameOver){
+            setGameOver(true)
         }
     }
     
@@ -132,50 +86,47 @@ useEffect(()=>{
 },[guess,cardArrayRef])
 
 useEffect(()=>{
-    if(gameOver)if(bestMoves>moves||bestMoves===0)setBestMoves(moves+1)
+    if(gameOver)if(bestMoves>moves||bestMoves===0)setBestMoves(moves)
 },[gameOver,bestMoves,moves])
 
 const clickHandler=(card)=>{
+    //no need to reveal the card if the user already sees it
     if(card.visible)return
     if(canClick===false)return
-
-    //flip card
+    //show card to user
     const newArray=cardArray
     newArray.filter(item=>item.id===card.id)[0].visible=true
     setCardArray([...newArray])
-    //is solved
+    //set guess which triggers use effect
     setGuess([...guess, card.name])
+    //setSelectedId
+    setSelectedId(card.id)
 }
 
 const resetGame=()=>{
     setGuess([])
     setCardArray(shuffledArray)
+    //set to false because game is no longer over
     setGameOver(false)
     setMoves(0)
     
 }
   return (
     <div className='match-game'>
-    
         <div className='match-game__header'>
             <div className='match-game__header-title'><h3>Matching Game</h3></div>
-            <div className='match-game__header-moves'><h3>Moves: {moves}</h3></div>
-            <div className='match-game__header-moves'><h3>Best: {bestMoves}</h3></div>
+            <div className='match-game__header-moves'><h3>Moves: {moves}</h3><h3>Best: {bestMoves}</h3></div>
         </div>
         
         {
         gameOver===false?
         <div className='match-game__card-container'>
             {cardArray&&cardArray.map((card)=>{
-                return(
-                
+                return(  
                 <div
                 key={uuidv4()}
-
                 onClick={()=>clickHandler(card)}>
-
-                    <Card card={card} clickHandler={clickHandler} BACK_IMG={BACK_IMG} />
-      
+                    <Card card={card} clickHandler={clickHandler} selectedId={selectedId} BACK_IMG={BACK_IMG}/>
                 </div>
                 
                 )
@@ -187,13 +138,10 @@ const resetGame=()=>{
             {cardArray&&cardArray.map((card, index)=>{
                 return(
                     
-                <Animated animationIn="fadeIn" animateOnMount isVisible={true} animationInDelay={index*50} key={uuidv4()}>
-                <div className='match-game__card match-game__card-game-over'>
-                    <div className='match-game__card-front'>
-                        <img className='match-game__img' src={card.src} alt={card.id}/>
+                    <div className='match-game__card'
+                    style={{backgroundImage:`url(${card.src})`}}>
+                        
                     </div>
-                </div>
-                </Animated>
                 
                 )
             })}
